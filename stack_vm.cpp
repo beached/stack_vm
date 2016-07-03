@@ -22,28 +22,30 @@
 
 #include <vector>
 #include <cstdlib>
+#include <cassert>
 
-
-enum class op_codes: size_t {
-	halt = 0,
-	nop,
-	load,
-	store,
-	push,
-	pop,
-	port_out,
-	port_in,
-	add,
-	sub,
-	mul,
-	div,
-	binary_and,
-	binary_or,
-	binary_xor,
-	binary_negate,
-	shift_left,
-	shift_right
-};
+namespace op_codes {
+	enum op_codes: size_t {
+		halt = 0,
+		nop = 1,
+		load = 2,
+		store = 3,
+		push = 4,
+		pop = 5,
+		port_out = 6,
+		port_in = 7,
+		add = 8,
+		sub = 9,
+		mul = 10,
+		div = 11,
+		binary_and = 12,
+		binary_or = 13,
+		binary_xor = 14,
+		binary_negate = 15,
+		shift_left = 16,
+		shift_right = 17
+	};
+}	// namespace op_codes
 
 struct stack_vm {
 	std::vector<uint8_t> vm_memory;
@@ -53,13 +55,48 @@ struct stack_vm {
 	size_t vm_top_reg;
 	size_t vm_prog_addr;
 
-	stack_vm( size_t memory_size_bytes = 1024 ): vm_memory( memory_size_bytes, 0 ) { }
-	stack_vm( std::vector<uint8_t> memory ): vm_memory{ std::move( memory ) } { }	
+	stack_vm( size_t memory_size_bytes = 1024 ): vm_memory( memory_size_bytes, 0 ), vm_top_reg{ 0 }, vm_prog_addr{ 0 } { }
 
-	size_t dispatch( ) const {
-		assert( vm_prog_addr <= vm_memory_size( ) );
+	stack_vm( std::vector<uint8_t> memory, size_t prog_addr = 0 ): vm_memory { std::move( memory ) }, vm_top_reg { 0 }, vm_prog_addr { prog_addr } { }
+
+	size_t dispatch( ) {
+		assert( vm_prog_addr <= vm_memory.size( ) );
 		return vm_memory[vm_prog_addr++];
 	}
+
+	void op_halt( ) { }
+
+	void op_nop( ) { }
+
+	void op_load( ) { }
+
+	void op_push( ) { }
+
+	void op_pop( ) { }
+
+	void op_port_out( ) { }
+
+	void op_port_in( ) { }
+
+	void op_add( ) { }
+
+	void op_sub( ) { }
+
+	void op_mul( ) { }
+
+	void op_div( ) { }
+
+	void op_binary_and( ) { }
+
+	void op_binary_or( ) { }
+
+	void op_binary_xor( ) { }
+
+	void op_binary_negate( ) { }
+
+	void op_shift_left( ) { }
+
+	void op_shift_right( ) { }
 
 	void step( ) {
 		switch( dispatch( ) ) {
@@ -75,59 +112,59 @@ struct stack_vm {
 				op_load( );	
 			break;
 			
-			case push:
+			case op_codes::push:
 				op_push( );
 			break;
 		
-			case pop:
+			case op_codes::pop:
 				op_pop( );
 			break;
 			
-			case port_out:
+			case op_codes::port_out:
 				op_port_out( );
 			break;
 			
-			case port_in:
+			case op_codes::port_in:
 				op_port_in( );
 			break;
 			
-			case add:
+			case op_codes::add:
 				op_add( );
 			break;
 			
-			case sub:
+			case op_codes::sub:
 				op_sub( );
 			break;
 			
-			case mul:
+			case op_codes::mul:
 				op_mul( );
 			break;
 			
-			case div:
+			case op_codes::div:
 				op_div( );
 			break;
 			
-			case binary_and:
+			case op_codes::binary_and:
 				op_binary_and( );
 			break;
 			
-			case binary_or:
+			case op_codes::binary_or:
 				op_binary_or( );
 			break;
 			
-			case binary_xor:
+			case op_codes::binary_xor:
 				op_binary_xor( );
 			break;
 			
-			case binary_negate:
+			case op_codes::binary_negate:
 				op_binary_negate( );
 			break;
 			
-			case shift_left:
+			case op_codes::shift_left:
 				op_shift_left( );
 			break;
 			
-			case shift_right:
+			case op_codes::shift_right:
 				op_shift_right( );
 			break;
 			
