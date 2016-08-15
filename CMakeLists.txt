@@ -37,8 +37,6 @@ ExternalProject_Add(
 	INSTALL_DIR "${DEP_BINARY_DIR}/inst"
 	CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${DEP_BINARY_DIR}/inst
 	GIT_TAG "master"
-	PATCH_COMMAND ""
-	TEST_COMMAND ""
  )
 
 include_directories( SYSTEM "${DEP_BINARY_DIR}/inst/include" )
